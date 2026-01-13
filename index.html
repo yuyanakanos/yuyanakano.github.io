@@ -53,12 +53,17 @@
 
         section {
             padding: calc(var(--spacing-unit) * 16) 0;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        section.animate {
             opacity: 0;
             transform: translateY(20px);
             transition: opacity 0.8s ease, transform 0.8s ease;
         }
 
-        section.visible {
+        section.animate.visible {
             opacity: 1;
             transform: translateY(0);
         }
