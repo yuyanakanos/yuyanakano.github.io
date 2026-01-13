@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yuya Nakano — Editor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #FAF9F7;
+            --color-text: #1C1C1C;
+            --color-text-muted: #6B6B6B;
+            --color-accent: #8B7355;
+            --color-line: #E5E3DF;
+            --font-display: 'Cormorant Garamond', serif;
+            --font-body: 'Crimson Pro', serif;
+            --spacing-unit: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 18px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 300;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+        }
+
+        ::selection {
+            background-color: var(--color-accent);
+            color: var(--color-bg);
+        }
+
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 calc(var(--spacing-unit) * 6);
+        }
+
+        section {
+            padding: calc(var(--spacing-unit) * 16) 0;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typography */
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 400;
+            letter-spacing: -0.02em;
+        }
+
+        .section-number {
+            font-family: var(--font-display);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.15em;
+            margin-bottom: calc(var(--spacing-unit) * 4);
+            display: block;
+        }
+
+        /* Divider */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background-color: var(--color-line);
+            margin: calc(var(--spacing-unit) * 8) 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            padding-top: calc(var(--spacing-unit) * 12);
+            padding-bottom: calc(var(--spacing-unit) * 12);
+        }
+
+        .hero-name {
+            font-size: clamp(3rem, 8vw, 6rem);
+            line-height: 1.1;
+            margin-bottom: calc(var(--spacing-unit) * 4);
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1.1rem, 2vw, 1.35rem);
+            font-weight: 300;
+            color: var(--color-text-muted);
+            max-width: 540px;
+            opacity: 0;
+            animation: fadeUp 1s ease forwards;
+            animation-delay: 0.6s;
+        }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: calc(var(--spacing-unit) * 8);
+            left: calc(var(--spacing-unit) * 6);
+            font-size: 0.75rem;
+            letter-spacing: 0.15em;
+            color: var(--color-text-muted);
+            writing-mode: vertical-rl;
+            opacity: 0;
+            animation: fadeIn 1s ease forwards;
+            animation-delay: 1.2s;
+        }
+
+        .hero-scroll::after {
+            content: '';
+            display: block;
+            width: 1px;
+            height: 60px;
+            background-color: var(--color-line);
+            margin-top: calc(var(--spacing-unit) * 2);
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* About Section */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: calc(var(--spacing-unit) * 12);
+            align-items: start;
+        }
+
+        .about-label {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        .about-text p {
+            margin-bottom: calc(var(--spacing-unit) * 3);
+        }
+
+        .about-text p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Works Section */
+        .works-list {
+            list-style: none;
+        }
+
+        .works-item {
+            padding: calc(var(--spacing-unit) * 5) 0;
+            border-bottom: 1px solid var(--color-line);
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: calc(var(--spacing-unit) * 4);
+            align-items: baseline;
+            transition: background-color 0.3s ease;
+        }
+
+        .works-item:first-child {
+            border-top: 1px solid var(--color-line);
+        }
+
+        .works-item:hover {
+            background-color: rgba(139, 115, 85, 0.03);
+        }
+
+        .works-category {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .works-title {
+            font-family: var(--font-display);
+            font-size: 1.35rem;
+        }
+
+        .works-client {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            text-align: right;
+        }
+
+        /* Contact Section */
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: calc(var(--spacing-unit) * 12);
+            align-items: start;
+        }
+
+        .contact-label {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--color-accent);
+        }
+
+        .contact-text {
+            margin-bottom: calc(var(--spacing-unit) * 6);
+        }
+
+        .contact-email {
+            font-family: var(--font-display);
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            color: var(--color-text);
+            text-decoration: none;
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-email::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: var(--color-accent);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+
+        .contact-email:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Footer */
+        footer {
+            padding: calc(var(--spacing-unit) * 8) 0;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            border-top: 1px solid var(--color-line);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            html {
+                font-size: 16px;
+            }
+
+            .container {
+                padding: 0 calc(var(--spacing-unit) * 3);
+            }
+
+            section {
+                padding: calc(var(--spacing-unit) * 10) 0;
+            }
+
+            .about-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: calc(var(--spacing-unit) * 4);
+            }
+
+            .works-item {
+                grid-template-columns: 1fr;
+                gap: calc(var(--spacing-unit) * 1);
+            }
+
+            .works-client {
+                text-align: left;
+            }
+
+            .hero-scroll {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero -->
+    <section class="hero visible">
+        <div class="container">
+            <h1 class="hero-name">Yuya Nakano</h1>
+            <p class="hero-tagline">
+                編集者。言葉を整え、問いを立て、伝わる形をつくる。<br>
+                AI時代の編集のあり方を探究中。
+            </p>
+        </div>
+        <span class="hero-scroll">SCROLL</span>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+        <div class="container">
+            <span class="section-number">01 — ABOUT</span>
+            <div class="about-content">
+                <span class="about-label">Profile</span>
+                <div class="about-text">
+                    <p>
+                        NewsPicks Brand Designにて、企業のブランドストーリーを編集。
+                        取材・構成・執筆を一貫して手がけ、「伝わる言葉」をつくることを仕事にしています。
+                    </p>
+                    <p>
+                        2023年より、AIと編集の協働を探究。
+                        「判断以外をAIに担わせる」をテーマに、編集ワークフローの再設計に取り組んでいます。
+                    </p>
+                    <p>
+                        noteにて「非エンジニアのためのAIのトリセツ」連載中。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- Works -->
+    <section id="works">
+        <div class="container">
+            <span class="section-number">02 — WORKS</span>
+            <ul class="works-list">
+                <li class="works-item">
+                    <span class="works-category">Brand Story</span>
+                    <span class="works-title">「忙しいのに何も進まない」の正体</span>
+                    <span class="works-client">FCNT / arrows Alpha</span>
+                </li>
+                <li class="works-item">
+                    <span class="works-category">Brand Story</span>
+                    <span class="works-title">経営者の「言葉にならない思い」を形にする</span>
+                    <span class="works-client">robothome</span>
+                </li>
+                <li class="works-item">
+                    <span class="works-category">Launch Pitch</span>
+                    <span class="works-title">スタートアップの物語を、投資家に届ける</span>
+                    <span class="works-client">Angel Bridge Portfolio</span>
+                </li>
+                <li class="works-item">
+                    <span class="works-category">note</span>
+                    <span class="works-title">AIに「丸投げ」して失敗する人の共通点</span>
+                    <span class="works-client">Personal</span>
+                </li>
+                <li class="works-item">
+                    <span class="works-category">Research</span>
+                    <span class="works-title">ドメイン駆動編集（DDE）</span>
+                    <span class="works-client">AI×Editorial</span>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <div class="container"><div class="divider"></div></div>
+
+    <!-- Contact -->
+    <section id="contact">
+        <div class="container">
+            <span class="section-number">03 — CONTACT</span>
+            <div class="contact-content">
+                <span class="contact-label">Get in Touch</span>
+                <div>
+                    <p class="contact-text">
+                        お仕事のご依頼、取材のご相談など、<br>
+                        お気軽にご連絡ください。
+                    </p>
+                    <a href="mailto:your-email@example.com" class="contact-email">your-email@example.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Yuya Nakano. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll reveal animation
+        const sections = document.querySelectorAll('section:not(.hero)');
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+</body>
+</html>
