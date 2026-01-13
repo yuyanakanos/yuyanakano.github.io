@@ -205,6 +205,24 @@
             text-align: right;
         }
 
+        .works-link {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            gap: calc(var(--spacing-unit) * 4);
+            align-items: baseline;
+            text-decoration: none;
+            color: inherit;
+            width: 100%;
+        }
+
+        .works-item:has(.works-link) {
+            padding: 0;
+        }
+
+        .works-item:has(.works-link) .works-link {
+            padding: calc(var(--spacing-unit) * 5) 0;
+        }
+
         /* Contact Section */
         .contact-content {
             display: grid;
@@ -302,6 +320,11 @@
                 gap: calc(var(--spacing-unit) * 1);
             }
 
+            .works-link {
+                grid-template-columns: 1fr;
+                gap: calc(var(--spacing-unit) * 1);
+            }
+
             .works-client {
                 text-align: left;
             }
@@ -356,9 +379,11 @@
             <span class="section-number">02 — WORKS</span>
             <ul class="works-list">
                 <li class="works-item">
-                    <span class="works-category">Brand Story</span>
-                    <span class="works-title">「忙しいのに何も進まない」の正体</span>
-                    <span class="works-client">FCNT / arrows Alpha</span>
+                    <a href="https://newspicks.com/news/15676875/" target="_blank" class="works-link">
+                        <span class="works-category">Brand Story</span>
+                        <span class="works-title">「忙しいのに何も進まない」の正体。認知科学が解き明かす脳の構造的バグ</span>
+                        <span class="works-client">FCNT / arrows</span>
+                    </a>
                 </li>
                 <li class="works-item">
                     <span class="works-category">Brand Story</span>
